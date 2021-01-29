@@ -26,5 +26,5 @@
     - Often reflect poor architectural decisions
     - Instead, use a random public IP and register a DNS name to it. It is much more in control and more scalable
     - Using load balancer is the best pattern 
-
+    - Allocating Elastic IP will cost us some money.
 
