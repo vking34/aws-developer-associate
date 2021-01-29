@@ -1,6 +1,8 @@
 # Regions and Availability Zones
 
+## Notes
 
+- Availability Zones are in isolated data centers
 
 ## References
 
