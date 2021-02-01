@@ -12,7 +12,7 @@
 
 - When u stop and then start an EC2 instance, it can __change its public IP__, but __remains its private IP__. 
 
-- If you need to have a fixed public IP for your instance, you need an Elastic IP
+- If you need to have a __fixed public IP__ for your instance, you need an __Elastic IP__.
 
 - An Elastic IP is a public IPv4 you own as long as you do not delete it
 
