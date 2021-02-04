@@ -49,4 +49,34 @@
 
 - New connections will establish to all other instances.
 
-#
+## Auto Scaling Group
+
+- Attributes:
+    - A launch configuration
+
+    - Min Size / Max Size / Initial Capacity
+
+    - Network + Subnets information
+
+    - Load Balancer Information
+
+    - Scaling Policies
+
+- Auto Scaling Alarms
+
+    - it is possible to scale an ASG based on CloudWatch alarms
+
+    - An alarm monitors a metric
+
+    - Metrics are computed for the overall ASG instances
+
+    - Scaling policies can be on CPU, Network, ... and can even be on custom metrics or based on a schedule
+
+- Use launch configuration or launch templates
+
+- To update ASG, you must provide a new launch configuration / launch template
+
+- IAM roles attached to an ASG will get assigned to EC2 instances
+
+- ASG can terminate instances marked as unhealthy by an LB (then replace them)
+
