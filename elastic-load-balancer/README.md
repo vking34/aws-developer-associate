@@ -1,5 +1,13 @@
 # Elastic Load Balancer - ELB
 
+## Types
+
+- Classic Loader Balancer
+    - expose a static DNS
+- Application Loader Balancer
+    - expose a static DNS
+- Network Loader Balancer
+    - expose a public static IP
 
 ## Cross-Zone Load Balancing
 
@@ -80,3 +88,16 @@
 
 - ASG can terminate instances marked as unhealthy by an LB (then replace them)
 
+- Scaling Policies
+    
+    - Target Tracking Scaling:
+        - Most simple and easy to set-up
+        - Example: i want the average ASG CPU to stay at around 40%
+
+    - Simple / Step Scaling:
+        - a CloudWatch alarm is triggered (CPU > 70%), then add 2 units
+        - a CloudWatch alarm is triggered (CPU < 30%), then remove 1 units
+    
+    - Scheduled Actions
+        - Anticipate a scaling based on known usage patterns
+        - Example: increase the min capacity to 10 at 5 pm on Fridays
