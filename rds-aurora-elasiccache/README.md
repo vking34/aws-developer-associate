@@ -165,3 +165,63 @@
 - Pay per second, can be more cost-effective
 
 ![](../references/images/aurora-02.png)
+
+
+## ElasticCache
+
+### Overview
+
+- Caches are in-memory databases with really high performance, low latency
+
+- Helps:
+    - Reduce load off of Db for read intensive workloads
+    - Make app stateless
+
+- ElastiCache is to get managed Redis or Memcached
+
+- Write scaling using sharding
+
+- Read scaling using Read Replicas
+
+
+### Redis vs Memcached
+
+- Redis:
+    - Multi AZ with Auto-failover
+    - Read Replicas to scale reads and have high availability
+    - Data durability using AOF persistence
+    - Backup and restore features
+
+- Memcached:
+    - Multi-node for partitioning of data (sharding)
+    - Non persistent
+    - No backup and restore
+    - Multi-thread architecture
+    
+### Caching Implementation Considerations
+
+- Lazy Loading / Cache-Aside / Lazy Population:
+
+    ![](../references/images/ec-00.png)
+
+    - Pros:
+        - Only requested data is cached, not filled up with unused data
+        - Node failure are not fatal (just increased latency to warm the cache)
+
+    - Cons:
+        - Cache miss penalty that results in 3 round trips, noticeable delay for that request
+        - Stale data: data can be updated in the database and outdated in the cache
+    
+
+- Write Through:
+    ![](../references/images/ec-01.png)
+
+    - Pros:
+        - Data in cache is never stale, reads are quick
+        - Write penalty vs Read penalty (each write requires 2 calls)
+
+    - Cons:
+        - Missing data until it is added / updated in the DB. Mitigation is implement Lazy Loading strategy as well
+        - Cache churn - a lot of the data will be never be read
+    
+- Always set TTL
