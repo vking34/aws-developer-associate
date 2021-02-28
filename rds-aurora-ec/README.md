@@ -73,7 +73,7 @@
 
             - __If the master is not encrypted, the read replicas can not be encrypted__
 
-            - Transparent Data Encryption (TDE) avaible for Oracle and SQL server
+            - __Transparent Data Encryption (TDE)__ avaible for __Oracle and MS SQL server only__
 
         - In-flight encryption:
             - SSL certificates to encrypt data to RDS in flight
@@ -84,6 +84,11 @@
                 - PostgreSQL: rds.force_ssl=1 in the AWS RDS console (parameter groups)
 
                 - MySQL: using command: GRANT USAGE ON *.* 'mysqluser'@'%' REQUIRE SSL;
+            
+
+    - Authentication:
+        - Oracle does not support IAM authentication
+        - Using a token obtained through the RDS service to ensure users are authenticated using short-lived credentials
     
     - Operations:
         - Encrypting RDS backups:
