@@ -148,3 +148,12 @@
 - An origin is a schema (protocol), host (domain), and port
 
 ![](../references/images/cors-00.png)
+
+## Consistency Model
+
+- Read after write consistency for POSTS of new objects
+
+- Eventual Consistency for DELETES and PUTS of existing objects
+
+    - If we read object after updating, we might get the older version
+    
