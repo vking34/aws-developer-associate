@@ -156,4 +156,25 @@
 - Eventual Consistency for DELETES and PUTS of existing objects
 
     - If we read object after updating, we might get the older version
-    
+
+## Replication
+
+- Must __enable versioning in source and destination__
+
+- Cross Region Replication (CRR): compliance, lower latency access, replication across accounts
+
+- Same Region Replication (SRR): log aggregation, live replication between production and test accounts
+
+- Buckets can be in different accounts
+
+- Copying is asynchronous
+
+- Must give proper IAM permissions to S3
+
+- After activating, only new objects are replicated (not retroactive)
+
+- For DELETE operations:
+    - a delete marker is not replicated (can be enabled)
+    - deleted objects are not replicated
+
+- No chaining of replication
