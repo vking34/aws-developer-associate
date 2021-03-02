@@ -157,6 +157,14 @@
 
     - If we read object after updating, we might get the older version
 
+## MFA Deletion
+
+- MFA forces user to generate a code on a device before doing important operations on S3
+
+- To use MFA Delete, enable Versioning on S3 bucket
+
+## Access Logs
+
 ## Replication
 
 - Must __enable versioning in source and destination__
