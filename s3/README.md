@@ -178,3 +178,148 @@
     - deleted objects are not replicated
 
 - No chaining of replication
+
+## Storage Classes
+
+- Standard:
+    - High durability (99.9999%) of objects across multiple AZ
+    - Sustain 2 concurrent facility failures
+    - Use cases: big data, mobile & gaming applications, conent distribution, ...
+
+- Standard - Infrequent Access (IA):
+    - Suitable for data that is less frequently accessed, but requires rapid access when needed
+    - High durability (99.9999%) of objects across multiple AZ
+    - Low cost compared to Standard
+    - Sustain 2 concurrent facility failures
+    - Use cases: as a data store for disaster recovery, backups, ..
+
+- One Zone - Infrequent Access (IA):
+    - Data stored in a single AZ
+    - 99.5% Availability
+    - Low latecy and high throughput performance
+    - Low cost compared to standard IA (by 20%)
+
+    - Uses cases: storing secondary backup copies of on-premise data, or storing data you can recreate
+
+- Intelligent Tiering
+    - Same low latency and high throughput performance of S3 standard
+
+    - Small monthly monitoring and auto-tiering fee
+    - Automatically moves objects between two access tiers based on changing access patterns (move S3 standard to IA)
+
+- Glacier
+    - Properties:
+        - Low cost object storage
+        - Data is retained for longer term
+        - Alternative to on-premise magnetic tape storage
+        - Cost per storage per month ($0.004 / GB) + retrieval cost
+        - Each item in glacier is called Archive (up to 40 TB)
+        - Archives are stored in Vaults
+
+    - Glacier:
+        - 3 retrieval options
+            - Expedited (1 to 5 min)
+            - Standard (3 to 5 hours)
+            - Bulk (5 to 12 hours)
+
+        - Minimum storage duration of 90 days
+
+    - Glacier Deep Archive:
+        - 2 retrieval options:
+            - Standard (12 hours)
+            - Bulk (48 hours)
+        
+        - Minimum storage duration of 180 days
+
+![](../references/images/storage-classes-00.png)
+
+## Lifecycle Rules
+![](../references/images/lifecycle-00.png)
+
+
+
+## Performance
+
+- At least 3500 PUT/COPY/POST/DELETE request per second per prefix in a bucket
+
+- At least 5000 GET/HEAD request per second per prefix in a bucket
+
+- There are no limits to the number of prefixes in a bucket
+
+
+### KMS Limitation
+
+- If you use SSE-KMS, you may be impacted by the KMS limits
+
+- When u upload, it calls the GenerateDataKey KMS API
+
+- When you download, it calls the Decrypt KMS API
+
+- Count towards the KMS quota per second (5500, 10000, 30000 req/s based on region)
+
+### Optimization
+
+- Multi-part upload:
+    - Recommended for file > 100MB, must use for file > 5GB
+    - Can help parallelize uploads
+
+- S3 transfer Acceleration (upload only)
+
+    - Increase transfer speed by transferring file to an AWS egde location which will forward the data to the S3 bucket in the target region
+
+    - Compatible with multi-part upload
+
+- Byte-range fetches
+    - Parallize GETs by requesting specific byte ranges
+    - Better resilience in case of failures
+
+## S3 & Glacier Select
+
+- Retrieve less data using SQL by performing __server side filtering__
+
+- Can filter by rows & columns (simple SQL statements)
+
+- Less network transfer, less CPU cost client-side
+
+
+## S3 Notifications
+
+- Event name filtering (ObjectCreated, ...)
+
+- Object name filtering possible (*.jpg)
+
+- Use case: generate thumbnails of images uploaded to S3
+
+- If two writes are made to a single non-versioned object at the same time, it is possible that only a single event notification will be sent.
+
+- If u want to ensure that an event notification is sent for every successful write, u can enable versioning on ur bucket
+
+![](../references/images/s3-notifications-00.png)
+
+## Athena
+
+- Serverless service to perform analytics directly against S3 files
+
+- Uses SQl language to query the files
+
+- Has a JDBC / ODBC driver
+
+- Charged per query and amount of data scanned
+
+- Supports CSV, JSON, ORC, Avro, and Parquet (built on Presto - Query Engine)
+
+- Uses cases: Business intelligence / analytics / reporting, analyze & query VPC flow logs, ELB logs, Cloudtrail, ...
+
+- Examp tip: Analyze data directly on S3 => use Athena
+
+
+## S3 Object Lock & Glacier Vault Lock
+
+- S3 Object Lock
+    - Adopt a WORM (Write Once Read Many)
+
+    - Block an object version deletion for a specified amount of time
+
+- GlacierVault Lock is the same
+
+- Helpful for compliance and data retention
