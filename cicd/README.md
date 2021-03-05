@@ -31,7 +31,7 @@
 - CodeCommit Notifications:
     - You can trigger notifications in CodeCommit using __SNS (Simple Notification Service) or Lambda or CloudWatch Event__
 
-    - Use cases for SNS / Lambda notifấy
+    - Use cases for SNS / Lambda notify
         - Trigger for pushes that happen in master branch
         - Notify external build system
         - Trigger Lambda function to perform codebase analysis
