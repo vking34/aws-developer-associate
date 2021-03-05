@@ -156,12 +156,24 @@
 - Eventual Consistency for DELETES and PUTS of existing objects
 
     - If we read object after updating, we might get the older version
-
-## MFA Deletion
+    
+## MFA Delete
 
 - MFA forces user to generate a code on a device before doing important operations on S3
 
+- Need to:
+    - Permanently delete an object version
+    - Suspend versioning on the bucket
+
 - To use MFA Delete, enable Versioning on S3 bucket
+
+- Won't need to:
+    - Enabling versioning
+    - Listing deleted versions
+
+- Only the bucket owner (root account) can enable/disable MFA-Delete
+
+- MFA-Delete currently can only be enabled using CLI
 
 ## Access Logs
 
