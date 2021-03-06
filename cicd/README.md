@@ -99,6 +99,8 @@
 
 - Builds can be defined within __CodePipeline or CodeBuild itself__
 
+![](../references/images/codebuild-00.png)
+
 ### BuilSpec
 
 - Define env:
@@ -117,7 +119,7 @@
 
 ### CodeBuild in VPC
 
-- By default, your CodeBuild containers are lauched outside your VPC
+- By default, your __CodeBuild containers are lauched outside your VPC__
 
 - Therefore, by default it cant access resources in a VPC
 
@@ -158,6 +160,8 @@
     - AfterInstall
     - ApplicationStart
     - __ValidateService__: really important
+
+![](../references/images/codedeploy-00.png)
 
 ### Configs
 

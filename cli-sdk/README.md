@@ -11,7 +11,7 @@
 
 - The exam expects you to know when you should use an SDK
 
-- If you don not specify or configure a default region, then us-east-1 will be chosen by default
+- If you don not specify or configure a default region, then __us-east-1 will be chosen by default__
 
 
 ## AWS Limits
