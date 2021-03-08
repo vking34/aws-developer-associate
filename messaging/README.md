@@ -112,3 +112,19 @@
 - Exactly-once send capability (by removing duplicates)
 
 - Message are processed in order by consumer
+
+- De-duplication:
+    - interval: 5 mins
+
+    - 2 methods:
+        - Content-based deduplication: will do a SHA-256 hash of the message body
+        - Explicity provide a message deduplication ID
+
+- Message Grouping
+    - If you specify the same value of MessageGroupID in an SQS FIFO queue, you can only have one consumer, and all messages are in order
+
+    - To get ordering at the level of subnet of messages, specify different values for MessageGroupID
+        - Messages that share a common Message Group ID will be in order within the group
+        - Each Group ID can have a different consumer (parallel processing)
+
+        - Ordering across groups is not guaranteed
