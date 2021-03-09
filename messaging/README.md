@@ -128,3 +128,166 @@
         - Each Group ID can have a different consumer (parallel processing)
 
         - Ordering across groups is not guaranteed
+
+## SNS - Simple Notification Service
+
+- Up to __10M subcriptions per topic__
+
+- __100,000 topics limit__
+
+- Subcribers can be:
+    - SQS
+    - HTTP
+    - Lambda
+    - Emails
+    - SMS messages
+    - Mobile Notifications
+
+- How to publish:
+
+    - Topic publish (using SDK)
+        - Create a topic
+        - Create a subcription
+        - Publish to the topic
+
+    - Direct Publish
+        - Create a platform application
+        - Create a platform endpoint
+        - Publish to the platform endpoint
+        - Works with google GCM, apple APNS, Amazon ADM, ...
+
+### Security
+
+- Encryption
+
+- Access Controls: IAM policies to regulate access to the SNS API
+
+- SNS Access policies
+    - Useful for cross-account to SNS topics
+    - Useful for allowing other services (s3) to write an SNS topic
+
+
+### SNS + SQS: Fan Out
+
+- Push once in SNS, receive in all SQS queues that are subcribers
+
+- Fully decouple, no data loss
+
+- SQS allows for: data persistence, delayed processing and retries of work
+
+- Ability to add more SQS subcribers over time
+
+- Make sure your SQS queue access policy allows for SNS to write
+
+- __SNS can not send messages to SQS FIFO queues (AWS limitation)__
+
+- Usecase: S3 events to multiple queues
+    - For the same combination of: __event type__ and __prefix__ you can only have one S3 event rule
+
+    - If u want to send the same S3 event to many SQS queues, use fan-out
+
+    ![](../references/images/sns-00.png)
+
+## Kinesis
+
+- Kinesis i s managed alternative to Apache Kafka
+
+- Great for app logs, metrics, IoT, clickstreams
+
+- Great for "real-time" big data
+
+- Great for streaming processing frameworks (Spark, NiFi, ...)
+
+- Data is automatically replicated to 3 AZ
+
+- Tools:
+    - Streams: low latency streaming ingest at scale
+    - Analytics: perform real-time analytics on streams using SQL
+    - Firehose: load streams into S3, Redshift, ES, ...
+
+![](../references/images/kenisis-00.png)
+
+- Streams are divided in ordered Shards / Partitions
+
+- Data retention is 1 day by default, can go up to 7 days
+
+- Ability to reprocess / replay data
+
+- Multiple app can consume the same stream
+
+- Real-time processing with scale of throughput
+
+- Once message is inserted in Kinesis, it cant be deleted (immutability)
+
+### Shards
+
+- One stream is made of many different shards
+
+- __1 MB/s or 1000 msg/s at write per shard__
+
+- __2 MB/s at read per shard__
+
+- Billing is per shard provisioned, can have as many shards as u want
+
+- Batching available or per message calls
+
+- The number of shards can evolve over time (reshard / merge)
+
+- __Records are ordered per shard__
+
+### Put Records
+
+- PutRecord API + Partition Key that gets hashed
+
+- The same key goes to the same partition (helps with ordering for specific key)
+
+- Messages sent get a "sequeunce number"
+
+- Choose a partition key that is highly distributed (helps prevent "hot partition")
+
+    - user_id if many users
+    - not country_id if 90% of the users are in one country
+
+- Use Batching with PutRecord to reduce costs and increase throughput
+
+- ProvisionedThroughputExceeded if we go over the limits
+    - Exceptions:
+        - Happens when sending more data (exceeding MB/s or TPS for any shard)
+
+        - Make sure u dont have a hot shard (such as your partition key is bad and too much data goes to that partition)
+
+    - Solution:
+        - Retries with backoff
+        - Increase shards (scaling)
+
+        - Ensure your partition key is a good one
+
+- Can use CLI, AWS SDK, or producer lib.
+
+### Kinesis Client Lib (KCL)
+
+- Kinesis Client Lib (KCL) enables to consume from Kinesis efficiently
+
+- Rule: each shard is be read only 1 KCL instance. Ex: 4 shards = max 4 KCL instances
+
+- Progress is checkpointed into DynamoDB (need IAM access)
+
+- KCL can run on EC2, Beanstalk, on Premise App
+
+- __Records are read in order at the shard level__
+
+### Security
+
+- Control access / authorization using IAM
+- Encryption in flight using HTTPS
+- Encryption at rest using KMS
+- Possibility to encrypt / decrypt data client side
+- VPC endpoints available for kinesis to access within VPC
+
+## Summary
+
+- SQS:
+    - For SQS standard, there is no ordering
+    - For SQS FIFO, if you dont use a group id, messages are consumed in the order they are sent, with only one consumer
+
+    - To scale the number of consumers, but u want messages to be grouped when they are related to each other, then use group id
