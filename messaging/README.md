@@ -75,7 +75,7 @@
 
 - When a consumer requests messages from the queue, it can optionally "wait" for messages to arrive if there none in the queue
 
-- LongPolling decreases the number of API calls made to SQS while increasing the efficiency and latency of your app
+- LongPolling decreases the number of API calls made to SQS while __increasing the efficiency and latency of your app, save costs__
 
 - The wait time can be between 1s to 20s
 
@@ -209,7 +209,7 @@
 
 - Streams are divided in ordered Shards / Partitions
 
-- Data retention is 1 day by default, can go up to 7 days
+- Data retention is __1 day by default, can go up to 7 days__
 
 - Ability to reprocess / replay data
 
@@ -217,7 +217,7 @@
 
 - Real-time processing with scale of throughput
 
-- Once message is inserted in Kinesis, it cant be deleted (immutability)
+- Once message is inserted in Kinesis, it cant be deleted (__immutability__)
 
 ### Shards
 
