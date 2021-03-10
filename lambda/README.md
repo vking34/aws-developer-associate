@@ -267,3 +267,95 @@
         - _X_AMZN_TRACE_ID
         - AWS_XRAY_CONTEXT_MISSING
         - AWS_XRAY_DEAMON_ADDRESS
+    
+## Lambda in VPC
+
+- By default, you Lambda func is lauched outside your own VPC (in an AWS owned VPC)
+
+- Therefore it cannot access resources in your VPC (RDS, ElasticCache, ...)
+
+- You must define the VPC ID, the subnets and the security groups
+
+- Lambda will create an ENI (Elastic Network Interface) in your subnets
+
+- __AWSLambdaVPCAccessExecutionRole__
+
+
+![](../references/images/lambda-03.png)
+
+- __Deploying a Lambda func in a public subnet does not give it internet access or a public IP__
+
+- Deploying a L func in a private subnet gives it internet if u have a __NAT Gateway / Instance__
+
+- U can use __VPC endpoints__ to privately access AWS services without a NAT
+
+![](../references/images/lambda-04.png)
+
+## Configuration
+
+- RAM:
+    - From 128MB to 3008MB in 64MB increments
+    - The more RAM u add, the more vCPU credits u get
+    - At 1,792MB, a func has the equivalent of one full vCPU
+    - After 1,792MB, u get more than one CPU, and need to use multi-threading in your code to benefit from it
+
+- If your app is CPU-bound (computation heavy), increase RAM
+
+- Timeout: default 3s, maxium is 900s (15min)
+
+## Execution Context
+
+- The execution context is temporary runtime environment that initializes any external dependencies of your lambda code
+
+- Great for database connections, HTTP clients, SDK clients, ...
+
+- The execution context is maintained for some time in anticipation of another lambda func invocation
+
+- The next func invocation can re-use the context to execution time and save time in initializing connections objects
+
+- The execution context includes the /tmp directory
+    - Max size is 512MB
+    - The directory content remains when the execution context is frozen, providing transient cache that can be used for multiple invocations (helpful to checkpoint your work)
+
+## Concurrency and Throttling
+
+- Concurrency limit: up to 1000 concurrent exections
+
+- Can set a "reserved concurrency" at the function level (=limit)
+
+- Each invocation over the concurrency limit will trigger a "throttle"
+
+- Throttle behavior:
+    - If synchronous invocation => return ThrottleError - 429
+    - If asynchronous invocation => retry automatically and then go to DLQ
+
+- If u need higher limit, open a support ticket
+
+- Issue: There are some app using Lambda func. One app is hit a lot and Lambda scale up to 1000 concurrent executions. So that other app are throttle.
+
+- If the func does not have enough concurrency available to process all events, additional requests are throttled.
+
+- For throttling errors (429) and system errors (500-series), L returns event to the queue and attempts to run the func again for up to 6 hours
+
+- The retry interval increases exponentially from 1 second after the first apptempt to a maximum of 5 min
+
+## Cold Starts & Provision Concurrency
+
+- Cold Start:
+    - New instance => code is loaded and code outside the handler run (init)
+
+    - If the init is large (code, dependencies, SDK, ...) this process can take some time
+    - First req served by new instances has higher latency than the rest
+
+- Provisioned Concurrency:
+    - Concurrency is allocalted before the func is invoked 
+    - So the cold start never happens and all invocations have low latency
+    - Application Auto Scaling can manage concurrency (schedule or target utilization)
+
+## Dependencies
+
+- Need to install the packages alongside your code and zip it together
+
+- Upload the zip straight to Lambda if less than 50MB, else to S3 first
+
+- AWS SDK comes by default with every Lambda function
