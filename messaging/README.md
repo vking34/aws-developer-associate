@@ -9,11 +9,11 @@
 - Attributes:
     - Unlimited throughput, unlimited number of messages in queue
 
-    - Default retention of messages: 4 days, maxium of 14 days
+    - Default retention of messages: __4 days, maxium of 14 days__
     
     - Low latency (<10 ms on publish and receive)
 
-    - Limitation of 256KB per message sent
+    - Limitation of __256KB per message__ sent
 
     - Can have duplicate messages (at least once delivery, occasionally)
 
