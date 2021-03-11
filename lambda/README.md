@@ -359,3 +359,88 @@
 - Upload the zip straight to Lambda if less than 50MB, else to S3 first
 
 - AWS SDK comes by default with every Lambda function
+
+
+## Lambda in Cloud
+
+- Inline func:
+    - Very simple
+
+    - Can not include dependencies with inline func
+
+- Through S3:
+    - Must store the Lambda zip in S3
+
+    - Must refer S3 zip location in the CloudFormation code
+        - S3Bucket
+        - S3Key: full path to zip
+        - S3ObjectVersion: if versioned bucket
+
+    - If u update the code in S3, but dont update S3Bucket, S3Key or S3ObjectVersion, CloudFormation wont update func
+
+## Layers
+
+- Custom Runtimes
+- Externalize Dependencies to re-use them
+
+## Versions
+
+- When u work on a Lambda function, we work on $LATEST
+
+- When we are ready to publish a Lambda function, we create a version
+
+- Versions are immutable
+
+- Versions have increasing version numbers
+
+- Versions get their own ARN
+
+- Version = Code + Config
+
+- Each version of the lambda func can be accessed
+
+
+## Aliases
+
+- Aliases are "pointers" to Lambda func versions
+
+- We can define a "dev", "test", "prod" aliases and have them point at different lambda versions
+
+- Aliases are mutable
+
+- Aliases enable Blue / Green deployment by assigning weights to Lambda functions
+
+- Aliases enable stable config of our ev
+
+
+## With CodeDeploy
+
+- CodeDeploy can help you automate traffic shift for Lambda aliases
+
+- Feature is integrated within the SAM framework
+
+- Linear: grow traffic every N minutes until 100%
+    - Linear10PercentEvery3Minutes
+    - Linear10PercentEvery10Minutes
+
+- Canary: try X percent then 100%
+
+- AllAtOnce: immediate
+
+- Can create Pre & Post Traffic hooks to check the health of Lambda func
+
+## Limits
+
+- Execution:
+    - Mem allocation: 128MB - 3008MB (64 increments)
+    - Maximum execution time: 900s (15min)
+    - Envir variables: 4 KB
+    - Disk capacity (/tmp): 512MB
+    - Concurrency executions: 1000
+
+- Deployment:
+    - Compressed file: 50MB
+    - Uncompressed file: 250 MB
+    - Can use /tmp directory to load other files at startup
+    - Size of environment variables: 4KB
+ 
