@@ -40,12 +40,12 @@
 
 - Pricing
     - Pay per calls:
-        - First 1M requests are free
+        - __First 1M requests are free__
 
         - $0.2 per 1M requests thereafter
 
     - Pay per duration:
-        - 400000 GB-seconds of compute time per month if FREE
+        - __400000 GB-seconds of compute time per month if FREE__
         - == 400000 seconds if functions is 1 GB RAM
         - After that $1 for 600,000 GB-seconds
 
@@ -158,7 +158,7 @@
 
 - By default, if function returns an error, the entire batch is reprocessed until the func succeeds, or the items in the batch expire
 
-- To ensure in-order processing, processing for the affected shard is paused until the error is reolved
+- To ensure in-order processing, processing for the affected shard is paused until the error is resolved
 - You can configure the event source mapping to:
     - discard old events
     - restrict the number of retries
@@ -193,7 +193,7 @@
 
 - Lambda deletes items from the queue after theyre processed successfully
 
-- You can configure the sourcequeue to send items to a dead-letter queue if they cant be processed
+- You can configure the source queue to send items to a dead-letter queue if they can not be processed
 
 ### Summary
 
@@ -256,17 +256,17 @@
     - Async Delivery Failures
     - Iterator Age (Kinesis & DynamoDb streams)
 
--Tracing with X-Ray
+- Tracing with X-Ray
     - Enable in Lambda config
     - Runs X-Ray deamon for u
     - Use SDK in code
     - Ensure Lambda func has a correct IAM execution role
-        - AWSXRayDeamonWriteAccess
+        - __AWSXRayDeamonWriteAccess__
     
     - Environment variables to communicate with X-Ray
-        - _X_AMZN_TRACE_ID
-        - AWS_XRAY_CONTEXT_MISSING
-        - AWS_XRAY_DEAMON_ADDRESS
+        - ___X_AMZN_TRACE_ID__
+        - __AWS_XRAY_CONTEXT_MISSING__
+        - __AWS_XRAY_DEAMON_ADDRESS__
     
 ## Lambda in VPC
 
@@ -276,7 +276,7 @@
 
 - You must define the VPC ID, the subnets and the security groups
 
-- Lambda will create an ENI (Elastic Network Interface) in your subnets
+- Lambda will __create an ENI__ (Elastic Network Interface) in your subnets
 
 - __AWSLambdaVPCAccessExecutionRole__
 
@@ -294,9 +294,9 @@
 ## Configuration
 
 - RAM:
-    - From 128MB to 3008MB in 64MB increments
-    - The more RAM u add, the more vCPU credits u get
-    - At 1,792MB, a func has the equivalent of one full vCPU
+    - From __128MB to 3008MB__ in 64MB increments
+    - The __more RAM u add, the more vCPU__ credits u get
+    - At __1,792MB__, a func has the equivalent of __one full vCPU__
     - After 1,792MB, u get more than one CPU, and need to use multi-threading in your code to benefit from it
 
 - If your app is CPU-bound (computation heavy), increase RAM
@@ -432,15 +432,15 @@
 ## Limits
 
 - Execution:
-    - Mem allocation: 128MB - 3008MB (64 increments)
-    - Maximum execution time: 900s (15min)
-    - Envir variables: 4 KB
-    - Disk capacity (/tmp): 512MB
-    - Concurrency executions: 1000
+    - Mem allocation: __128MB - 3008MB__ (64 increments)
+    - Maximum execution time: __900s__ (15min)
+    - Envir variables: __4 KB__
+    - Disk capacity (/tmp): __512MB__
+    - Concurrency executions: __1000__
 
 - Deployment:
-    - Compressed file: 50MB
-    - Uncompressed file: 250 MB
-    - Can use /tmp directory to load other files at startup
-    - Size of environment variables: 4KB
+    - Compressed file: __50MB__
+    - Uncompressed file: __250 MB__
+    - Can use __/tmp__ directory to load other files at startup
+    - Size of environment variables: __4KB__
  
