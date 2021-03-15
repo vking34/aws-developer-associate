@@ -45,7 +45,7 @@
 
 ### WCU
 
-- One WRU represents one write per second for an item up to 1 KB in size
+- One WRU represents __1 write per second for an item up to 1 KB in size__
 
 - If the items are larger than 1 KB, more WCU are consumed
 
@@ -60,7 +60,7 @@
 
 - Strongly Consistent Read: if we read just after a write, we will get the correct data
 
-- One RCU represents one strongly consistent read per second, or two eventually consistent reads per second, for an item up to 4KB in size
+- One RCU represents __1 strongly consistent read per second, or 2 eventually consistent reads per second, for an item up to 4KB in size__
 
 - If the items are larger than 4KB, more RCU are consumed
 
@@ -77,7 +77,7 @@
 
     - Total partitions: CEILING(MAX(Capacity, Size))
 
-- WCU and RCU are spread evenly between partitions
+- __WCU and RCU are spread evenly between partitions__
 
 ### Throttling
 
@@ -164,7 +164,7 @@
 
 ### Local Secondary Index - LSI
 
-- Alternate range key for your table, local to the hash key
+- __Alternate range key for your table__, local to the hash key
 
 - Up to 5 local secondary indexes per table
 
@@ -177,7 +177,7 @@
 
 ### Global Secondary Index - GSI
 
-- To speed up queries on non-key attributes, use a Global Secondary Index
+- To __speed up queries on non-key attributes__, use a Global Secondary Index
 
 - GSI = partition key + optional sort key
 
@@ -196,7 +196,7 @@
 ### Throttling
 
 - GSI:
-    - If the writes are throttled on the GSI, then the main table will be throttled!
+    - __If the writes are throttled on the GSI, then the main table will be throttled!__
 
     - Even if the WCU on the main tables are fine
 
